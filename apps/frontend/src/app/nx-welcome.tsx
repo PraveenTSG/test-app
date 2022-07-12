@@ -7,7 +7,6 @@ export function NxWelcome({ title }: { title: string }) {
   const [age, setAge] = useState('');
   const [address, setAddress] = useState('');
 
-  //Test2
   const handleClick = () => {
     alert(`${name}, ${age}, ${address}`);
   };

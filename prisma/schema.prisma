@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("NX_DATABASE_URL")
+}
+
+model user {
+  iduser  Int     @id @default(autoincrement())
+  name    String? @db.VarChar(250)
+  age     Int?
+  address String? @db.VarChar(250)
+}
