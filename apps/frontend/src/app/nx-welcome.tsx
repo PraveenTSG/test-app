@@ -1,14 +1,24 @@
 import { Button, Grid, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchUser } from './redux/user.slice';
 
 export function NxWelcome({ title }: { title: string }) {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [address, setAddress] = useState('');
 
+  const dispatch = useDispatch();
+
   const handleClick = () => {
-    alert(`${name}, ${age}, ${address}`);
+    const details = {
+      name: name,
+      age: age,
+      address: address,
+    };
+    // alert(`${name}, ${age}, ${address}`);
+    dispatch(fetchUser({ details }));
   };
 
   return (

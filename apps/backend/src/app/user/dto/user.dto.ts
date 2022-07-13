@@ -12,3 +12,16 @@ export class CreateUserDto {
   @IsNotEmpty()
   address: string;
 }
+
+export class UpdateUserDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  age: number;
+
+  @IsNotEmpty()
+  address: string;
+}
