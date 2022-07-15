@@ -1,15 +1,16 @@
 import { Button, Grid, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchUser } from './redux/user.slice';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser, getAllUsers, selectAllUser } from './redux/user.slice';
+import { useNavigate } from 'react-router-dom';
 
-export function NxWelcome({ title }: { title: string }) {
+function NxWelcome({ title }: { title: string }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [address, setAddress] = useState('');
-
-  const dispatch = useDispatch();
 
   const handleClick = () => {
     const details = {
@@ -20,7 +21,7 @@ export function NxWelcome({ title }: { title: string }) {
     // alert(`${name}, ${age}, ${address}`);
     dispatch(fetchUser({ details }));
   };
-
+  // console.log('Users', users ?? {});
   return (
     <Box>
       <Grid
@@ -80,6 +81,16 @@ export function NxWelcome({ title }: { title: string }) {
               </Button>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate('/table');
+            }}
+          >
+            View Users
+          </Button>
         </Grid>
       </Grid>
     </Box>

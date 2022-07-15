@@ -67,9 +67,9 @@ export class UserService {
         },
 
         data: {
-          name: userData.name != null ? userData.name : undefined, // If null, don't include
-          age: Number(userData.age),
-          address: userData.address,
+          name: userData.name != '' ? userData.name : undefined, // If null, don't include ---> userData.name != null ? userData.name : undefined
+          age: userData.age != 0 ? Number(userData.age) : undefined,
+          address: userData.address != '' ? userData.address : undefined,
         },
       });
       return {

@@ -1,42 +1,22 @@
+import { Params } from 'react-router-dom';
 import {
   createAsyncThunk,
-  createEntityAdapter,
   createSelector,
   createSlice,
-  EntityState,
-  PayloadAction,
 } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const USER_FEATURE_KEY = 'user';
 
-/*
- * Update these interfaces according to your requirements.
- */
-
 export interface UserState {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
   error: string;
   userDetails: any;
+  allUsers: any;
+  getUser: any;
 }
 
-/**
- * Export an effect using createAsyncThunk from
- * the Redux Toolkit: https://redux-toolkit.js.org/api/createAsyncThunk
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(fetchUser())
- * }, [dispatch]);
- * ```
- */
+//Add user
 export const fetchUser = createAsyncThunk(
   'user/fetchStatus',
   async ({ details }: any) => {
@@ -48,10 +28,76 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
+//Get all user details
+export const getAllUsers = createAsyncThunk(
+  'user/getAllUsersStatus',
+  async () => {
+    return await axios.get(process.env['NX_URL'] + 'user/getUsers', {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    });
+  }
+);
+
+//Get user details by Id
+export const getUserById = createAsyncThunk(
+  'user/getUserStatus',
+  async (id: any) => {
+    return await axios.get(process.env['NX_URL'] + 'user/getUser/' + id, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+      // params: {
+      //   id,
+      // },
+    });
+  }
+);
+
+//Update user details by Id
+export const updateUserById = createAsyncThunk(
+  'user/fetchStatus',
+  async ({ userId, details }: { userId: string; details: any }) => {
+    // console.log('Details', details);
+    console.log('Id', userId);
+    return axios.patch(
+      process.env['NX_URL'] + 'user/updateUser/' + userId,
+      details,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+        // Params: {
+        //   id: userId,
+        // },
+      }
+    );
+  }
+);
+
+//Delete user details by Id
+export const deleteUserById = createAsyncThunk(
+  'user/getUserStatus',
+  async (id: any) => {
+    console.log('Deleted ID', id);
+    return await axios.delete(process.env['NX_URL'] + 'user/deleteUser/' + id, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+      // params: {
+      //   id,
+      // },
+    });
+  }
+);
+
 export const initialUserState: UserState = {
   loadingStatus: 'not loaded',
   error: 'null',
   userDetails: [],
+  allUsers: [],
+  getUser: {},
 };
 
 export const userSlice = createSlice({
@@ -60,6 +106,7 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      ////////////////Add User////////////////////
       .addCase(fetchUser.pending, (state: UserState) => {
         state.loadingStatus = 'loading';
       })
@@ -67,56 +114,61 @@ export const userSlice = createSlice({
         state.loadingStatus = 'loaded';
         state.userDetails = (action.payload as any).data;
       })
-      .addCase(fetchUser.rejected, (state: UserState, action) => {
+      .addCase(fetchUser.rejected, (state: UserState) => {
+        state.loadingStatus = 'error';
+      })
+      ////////////////Get All Users////////////////////
+      .addCase(getAllUsers.pending, (state: UserState) => {
+        state.loadingStatus = 'loading';
+      })
+      .addCase(getAllUsers.fulfilled, (state: UserState, action) => {
+        state.loadingStatus = 'loaded';
+        state.allUsers = (action.payload as any).data.users;
+      })
+      .addCase(getAllUsers.rejected, (state: UserState) => {
+        state.loadingStatus = 'error';
+      })
+      ////////////////Get User by Id////////////////////
+      .addCase(getUserById.pending, (state: UserState) => {
+        state.loadingStatus = 'loading';
+      })
+      .addCase(getUserById.fulfilled, (state: UserState, action) => {
+        state.loadingStatus = 'loaded';
+        state.getUser = (action.payload as any).data.user;
+      })
+      .addCase(getUserById.rejected, (state: UserState) => {
         state.loadingStatus = 'error';
       });
+    //     //////////////Update User by Id////////////////////
+    //     .addCase(updateUserById.pending, (state: UserState) => {
+    //       state.loadingStatus = 'loading';
+    //     })
+    //     .addCase(updateUserById.rejected, (state: UserState) => {
+    //       state.loadingStatus = 'error';
+    //     })
+    //     //////////////Delete User by Id////////////////////
+    //     .addCase(deleteUserById.pending, (state: UserState) => {
+    //       state.loadingStatus = 'loading';
+    //     })
+    //     .addCase(deleteUserById.rejected, (state: UserState) => {
+    //       state.loadingStatus = 'error';
+    //     });
   },
 });
 
-/*
- * Export reducer for store configuration.
- */
 export const userReducer = userSlice.reducer;
 
-/*
- * Export action creators to be dispatched. For use with the `useDispatch` hook.
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(userActions.add({ id: 1 }))
- * }, [dispatch]);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#usedispatch
- */
 export const userActions = userSlice.actions;
-
-/*
- * Export selectors to query state. For use with the `useSelector` hook.
- *
- * e.g.
- * ```
- * import { useSelector } from 'react-redux';
- *
- * // ...
- *
- * const entities = useSelector(selectAllUser);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#useselector
- */
 
 export const getUserState = (rootState: any): UserState =>
   rootState[USER_FEATURE_KEY];
 
 export const selectAllUser = createSelector(
   getUserState,
-  (state: UserState) => state.userDetails
+  (state: UserState) => state.allUsers
+);
+
+export const getUserDetails = createSelector(
+  getUserState,
+  (state: UserState) => state.getUser
 );

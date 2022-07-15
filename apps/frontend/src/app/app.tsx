@@ -1,13 +1,17 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
 import NxWelcome from './nx-welcome';
+import BasicTable from './Table';
+import { Routes, Route } from 'react-router-dom';
+import User from './User';
 
 export function App() {
   return (
-    <>
-      <NxWelcome title="frontend" />
-      <div />
-    </>
+    <div>
+      <Routes>
+        <Route path="/" element={<NxWelcome title="Frontend" />} />
+        <Route path="/table" element={<BasicTable />} />
+        <Route path="/user/:id" element={<User />} />
+      </Routes>
+    </div>
   );
 }
 

@@ -46,6 +46,8 @@ export class UserController {
     @Body() updatePostDto: UpdateUserDto
     // @Query('crudQuery') crudQuery: string
   ) {
+    console.log('DTO', updatePostDto);
+
     const updated = await this.userService.updateUserDetails(
       id,
       updatePostDto
