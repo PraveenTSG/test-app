@@ -8,8 +8,21 @@ datasource db {
 }
 
 model user {
-  iduser  Int     @id @default(autoincrement())
-  name    String? @db.VarChar(250)
-  age     Int?
-  address String? @db.VarChar(250)
+  iduser   Int        @id @default(autoincrement())
+  name     String?    @db.VarChar(250)
+  age      Int?
+  address  String?    @db.VarChar(250)
+  email    String     @unique @db.VarChar(250)
+  hash     String     @db.VarChar(250)
+  hashedRt String?    @db.VarChar(250)
+  invoices invoices[]
+}
+
+model invoices {
+  invoice_id Int  @id @default(autoincrement())
+  price      Int
+  userId     Int
+  user       user @relation(fields: [userId], references: [iduser], onDelete: NoAction, onUpdate: NoAction, map: "userId")
+
+  @@index([userId], map: "userId_idx")
 }

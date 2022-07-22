@@ -1,4 +1,7 @@
 -- CreateTable
+
+-- yarn prisma migrate dev --name init
+
 CREATE TABLE `user` (
     `iduser` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(250) NULL,

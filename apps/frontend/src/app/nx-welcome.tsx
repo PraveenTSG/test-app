@@ -62,35 +62,47 @@ function NxWelcome({ title }: { title: string }) {
           />
         </Grid>
         <Grid item>
-          <Grid container spacing={2}>
+          <Grid container spacing={0.5}>
             <Grid item>
               <Button variant="contained" onClick={handleClick}>
                 Save
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container spacing={0.5}>
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  navigate('/table');
+                }}
+              >
+                View Users
               </Button>
             </Grid>
             <Grid item>
               <Button
                 variant="contained"
                 onClick={() => {
-                  setName('');
-                  setAddress('');
-                  setAge('');
+                  navigate('/addInvoice');
                 }}
               >
-                Clear
+                Add Invoice
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  navigate('/table');
+                }}
+              >
+                View Invoice
               </Button>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate('/table');
-            }}
-          >
-            View Users
-          </Button>
         </Grid>
       </Grid>
     </Box>

@@ -1,4 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
+import {
+  invoiceReducer,
+  InvoiceState,
+  INVOICE_FEATURE_KEY,
+} from './invoice.slice';
 import { USER_FEATURE_KEY, userReducer, UserState } from './user.slice';
 // import {
 //   sessionsEvaluationReducer,
@@ -9,12 +14,14 @@ import { USER_FEATURE_KEY, userReducer, UserState } from './user.slice';
 
 export interface State {
   [USER_FEATURE_KEY]: UserState;
+  [INVOICE_FEATURE_KEY]: InvoiceState;
 }
 
 const store = configureStore({
   reducer: {
     // [SESSIONSEVALUATION_FEATURE_KEY]: sessionsEvaluationReducer,
     [USER_FEATURE_KEY]: userReducer,
+    [INVOICE_FEATURE_KEY]: invoiceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
